@@ -20,6 +20,8 @@ exports.Application = Application.specialize({
         value: function () {
             this.super();
 
+            // Replace the addStyle of DocumentResources so that we can
+            // compile the CSS, and then insert the compiled styles directly
             DocumentResources.prototype.addStyle = function (element) {
                 // from the original
                 var self = this,
@@ -38,11 +40,11 @@ exports.Application = Application.specialize({
                 // load and inject CSS
 
                 // "convert" to module id
-                var moduleId = url.replace(require.location, "");
-
-                Promise.all([rework, require.async(moduleId)])
-                .spread(function (rework, exports) {
-                    var css = rework(exports.content)
+                // NOTE: require.read does not cache, but DocumentResources
+                // shouldn't insert resources that it already has anyways
+                Promise.all([rework, require.read(url)])
+                .spread(function (rework, css) {
+                    css = rework(css)
                         .use(reworkVars(cssVariables))
                         .toString();
 
@@ -57,43 +59,5 @@ exports.Application = Application.specialize({
                 .done();
             };
         }
-    },
-
-    _load: {
-        value: function(applicationRequire, callback) {
-            // Hook application require to allow CSS files to be loaded
-            // through require
-            var oldMakeCompiler = applicationRequire.config.makeCompiler;
-            applicationRequire.config.makeCompiler = function (config) {
-                return exports.CssCompiler(
-                    config,
-                    oldMakeCompiler(config)
-                );
-            };
-            applicationRequire.config.compile = applicationRequire.config.makeCompiler(applicationRequire.config);
-
-            return this.super(applicationRequire, callback);
-        }
     }
 });
-
-/**
- * Allows the .meta files to be loaded as json
- * @see Compiler middleware in require/require.js
- * @param config
- * @param compile
- */
-var cssExpression = /\.css/;
-exports.CssCompiler = function (config, compile) {
-    return function (module) {
-        var css = (module.location || "").match(cssExpression);
-        if (css) {
-            module.exports = {
-                content: module.text
-            };
-            return module;
-        } else {
-            return compile(module);
-        }
-    };
-};
