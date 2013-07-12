@@ -1,3 +1,8 @@
+:root {
+  var-local-color: #c06;
+}
+
 .Thing {
-    background: var(good)
+    background: var(local-color);
+    color: var(global-color);
 }
