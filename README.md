@@ -1,32 +1,27 @@
-{{name}}
-==============
+# Compiled CSS in Montage
 
-This is the Montage app template.
+A proof of concept to show how "CSS" could be compiled in Montage.
 
-Note: Before working on your app you will need to add montage to it.
+## Syntax
 
+It's very hacky. Within CSS you can use the syntax described by
+[rework-vars](https://github.com/visionmedia/rework-vars):
+
+```css
+:root {
+  var-header-color: #06c;
+  var-main-color: #c06;
+}
+
+div {
+  var-accent-background: linear-gradient(to top, var(main-color), white);
+}
 ```
-npm install .
-```
 
-Layout
-------
+or you can define global CSS variables in `css-variables.json`.
 
-The template contains the following files and directories:
+## Implementation
 
-* `index.html`
-* `package.json` – Describes your app and its dependencies
-* `README.markdown` – This readme. Replace the current content with a description of your app
-* `ui/` – Directory containing all the UI .reel directories.
-  * `main.reel` – The main interface component
-* `core/` – Directory containing all core code for your app.
-* `node_modules/` – Directory containing all npm packages needed, including Montage. Any packages here must be included as `dependencies` in `package.json` for the Montage require to find them.
-* `assets/` – Assets such as global styles and images for your app
-* `test/` – Directory containing tests for your app.
-  * `all.js` – Module that point the test runner to all your jasmine specs.
-* `run-tests.html` – Page to run jasmine tests manually in your browser
-
-Create the following directories if you need them:
-
-* `locale/` – Directory containing localized content.
-* `scripts/` – Directory containing other JS libraries. If a library doesn’t support the CommonJS "exports" object it will need to be loaded through a `<script>` tag.
+Uses the `applicationPrototype` property of the `package.json` to load a
+custom application. This replaces `DocumentResources.prototype.addStyle` to
+inject compiled CSS text instead of loading the CSS file through a link tag.
