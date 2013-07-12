@@ -20,6 +20,12 @@ div {
 
 or you can define global CSS variables in `css-variables.json`.
 
+## Known issues
+
+ * URLS (`url(thing.png)`) are not rebased, and so will be broken.
+ * This does not integrate with Mop and so even in production, the CSS will be
+   compiled at runtime.
+
 ## Implementation
 
 Uses the `applicationPrototype` property of the `package.json` to load a
