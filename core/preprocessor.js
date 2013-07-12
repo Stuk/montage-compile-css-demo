@@ -1,7 +1,8 @@
 var Application = require("montage/core/application").Application,
     DocumentResources = require("montage/core/document-resources").DocumentResources,
     Promise = require("montage/core/promise").Promise,
-    reworkVars = require("rework-vars/index");
+    reworkVars = require("rework-vars/index"),
+    cssVariables = require("css-variables.json");
 
 var rework = require.loadPackage({name: "rework"})
 .then(function (reworkRequire) {
@@ -42,15 +43,16 @@ exports.Application = Application.specialize({
                 Promise.all([rework, require.async(moduleId)])
                 .spread(function (rework, exports) {
                     var css = rework(exports.content)
-                        .use(reworkVars())
+                        .use(reworkVars(cssVariables))
                         .toString();
 
                     var style = document.createElement("style");
                     style.type = "text/css";
                     style.textContent = css;
+                    style.setAttribute("data-from", url);
 
                     var documentHead = self._document.head;
-                    documentHead.insertBefore(element, documentHead.firstChild);
+                    documentHead.insertBefore(style, documentHead.firstChild);
                 })
                 .done();
             };
