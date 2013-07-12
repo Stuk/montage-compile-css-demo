@@ -1,6 +1,7 @@
 # Compiled CSS in Montage
 
-A proof of concept to show how "CSS" could be compiled in Montage.
+A proof of concept to show how CSS could be compiled in Montage. Based on
+[rework](https://github.com/visionmedia/rework).
 
 ## Syntax
 
