@@ -1,16 +1,19 @@
 {
-    "name": "css-vars",
-    "version": "0.1.0",
-    "applicationPrototype": "core/preprocessor[Application]",
-    "dependencies": {
-        "montage": "~0.13.1",
-        "digit": "~0.2.0"
-    },
-    "devDependencies": {
-        "montage-testing": "0.2.0"
-    },
-    "exclude": [
-        "run-tests.html",
-        "test"
-    ]
+  "name": "css-vars",
+  "version": "0.1.0",
+  "applicationPrototype": "core/preprocessor[Application]",
+  "dependencies": {
+    "montage": "~0.13.1",
+    "digit": "~0.2.0",
+    "rework": "~0.17.2",
+    "rework-vars": "~1.0.0",
+    "rework-visit": "~1.0.0"
+  },
+  "devDependencies": {
+    "montage-testing": "0.2.0"
+  },
+  "exclude": [
+    "run-tests.html",
+    "test"
+  ]
 }

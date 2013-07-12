@@ -1,5 +1,18 @@
 var Application = require("montage/core/application").Application,
-    DocumentResources = require("montage/core/document-resources").DocumentResources;
+    DocumentResources = require("montage/core/document-resources").DocumentResources,
+    Promise = require("montage/core/promise").Promise,
+    reworkVars = require("rework-vars/index");
+
+var rework = require.loadPackage({name: "rework"})
+.then(function (reworkRequire) {
+    // these plugins uses modules from Node, and so let's inject them to stop
+    // them getting loaded.
+    ["lib/plugins/at2x", "rework-inherit", "lib/plugins/inline"]
+    .forEach(function (moduleId) {
+        reworkRequire.inject(moduleId, {});
+    });
+    return reworkRequire.async("rework");
+});
 
 exports.Application = Application.specialize({
     constructor: {
@@ -9,8 +22,7 @@ exports.Application = Application.specialize({
             DocumentResources.prototype.addStyle = function (element) {
                 // from the original
                 var self = this,
-                    url = element.getAttribute("href"),
-                    documentHead;
+                    url = element.getAttribute("href");
 
                 url = this.normalizeUrl(url);
 
@@ -26,9 +38,19 @@ exports.Application = Application.specialize({
 
                 // "convert" to module id
                 var moduleId = url.replace(require.location, "");
-                require.async(moduleId)
-                .then(function (exports) {
-                    debugger;
+
+                Promise.all([rework, require.async(moduleId)])
+                .spread(function (rework, exports) {
+                    var css = rework(exports.content)
+                        .use(reworkVars())
+                        .toString();
+
+                    var style = document.createElement("style");
+                    style.type = "text/css";
+                    style.textContent = css;
+
+                    var documentHead = self._document.head;
+                    documentHead.insertBefore(element, documentHead.firstChild);
                 })
                 .done();
             };
