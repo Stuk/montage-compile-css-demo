@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>css-vars</title>
+
+    <link rel="stylesheet" href="assets/style/style.css" />
+
+    <script src="node_modules/montage/montage.js" async></script>
+    <script type="text/montage-serialization">
+    {
+        "button": {
+            "prototype": "digit/ui/button.reel",
+            "properties": {
+                "element": {"#": "button"}
+            }
+        }
+    }
+    </script>
+</head>
+<body>
+    <button data-montage-id="button"></button>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+    "name": "css-vars",
+    "version": "0.1.0",
+    "applicationPrototype": "core/preprocessor[Application]",
+    "dependencies": {
+        "montage": "~0.13.1",
+        "digit": "~0.2.0"
+    },
+    "devDependencies": {
+        "montage-testing": "0.2.0"
+    },
+    "exclude": [
+        "run-tests.html",
+        "test"
+    ]
+}
