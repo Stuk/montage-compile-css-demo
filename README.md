@@ -1,11 +1,23 @@
 # Compiled CSS in Montage
 
 A proof of concept to show how CSS could be compiled in Montage. Based on
-[rework](https://github.com/visionmedia/rework).
+[rework](https://github.com/visionmedia/rework). It just uses the
+rework-vars plugin to add CSS variables (for example to define global
+colours to be used throughout the app's CSS), although of course more
+plugins could be added.
+
+Interesting files:
+
+ * [core/preprocessor.js](core/preprocessor.js)
+ * [ui/thing.reel/thing.css](ui/thing.reel/thing.css)
+ * [css-variables.json](css-variables.json)
+
+Try it out by cloning this repo and running `npm install` in the
+directory, and then visiting `index.html` through a web server.
 
 ## Syntax
 
-It's very hacky. Within CSS you can use the syntax described by
+Within CSS you can use the syntax described by
 [rework-vars](https://github.com/visionmedia/rework-vars):
 
 ```css
@@ -44,4 +56,5 @@ Some of the rework modules don't work in the browser, and so those are
 injected by `core/preprocessor.js` so they are not loaded.
 
 Some of the modules use an `index.js` module, but don't specifiy a `main`
-property in the `package.json`, and so I have checked those in an patched them.
+property in the `package.json`, and so I have checked them in and patched them
+to include this property.
